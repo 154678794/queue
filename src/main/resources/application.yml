@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: queue
+  rabbitmq:
+    host: 182.61.52.221
+    port: 5672
+    username: cc
+    password: 154678794
+server:
+  servlet:
+    context-path: /sysin
+  port: 8080
