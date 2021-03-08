@@ -29,12 +29,12 @@ public class publishHandler {
 
     @GetMapping("/deleteQueue")
     public void deleteQueue(){
-        dynamicRabbitmq.deleteQueue("dynamicQueue");
+        dynamicRabbitmq.deleteQueue("dynamicQueue1");
     }
 
     @GetMapping("/stopListener")
     public void stopListener(){
-        dynamicRabbitmq.stopListener("dynamicQueue");
+        dynamicRabbitmq.stopListener("dynamicQueue1");
     }
 
 }

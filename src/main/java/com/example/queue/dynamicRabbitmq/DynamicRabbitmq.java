@@ -103,9 +103,7 @@ public class DynamicRabbitmq {
      * @param queueName 队列名
      */
     public void deleteQueue(String queueName) {
-        System.out.println("123");
         queueName = getFullQueueName(queueName);
-        System.out.println("1231");
         if (Objects.requireNonNull(rabbitAdmin.getQueueInfo(queueName)).getMessageCount() == 0) {
             rabbitAdmin.deleteQueue(queueName);
             log.info("成功删除mq队列{}", queueName);
