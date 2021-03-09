@@ -24,6 +24,8 @@ public class ConsumerHandler implements ChannelAwareMessageListener {
      */
     private final Boolean needAck;
 
+    private String queueName;
+
     /**
      * 接收消息
      *
@@ -61,5 +63,6 @@ public class ConsumerHandler implements ChannelAwareMessageListener {
      */
     public void handleMessage(String data) {
 
+        new reciveMessage().processC(data,queueName);
     }
 }

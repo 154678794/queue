@@ -129,19 +129,21 @@ public class DynamicRabbitmq {
      * @param queueName   队列名
      * @param routingKey  路由名
      * @param consumerNum 消费者线程数量
-     * @param needDlx     需要死信队列
+     * @param needDlx     需要死信
+     *
+     *                    队列
      */
     public void startListener(String queueName, String routingKey, int consumerNum, boolean needDlx) {
-        queueName = getFullQueueName(queueName);
-        addQueueAndExchange(queueName, EXCHANGE, routingKey, needDlx);
+        String FullqueueName = getFullQueueName(queueName);
+        addQueueAndExchange(FullqueueName, EXCHANGE, routingKey, needDlx);
         DirectMessageListenerContainer container = new DirectMessageListenerContainer(rabbitTemplate.getConnectionFactory());
-        DirectMessageListenerContainer getContainer = CONTAINER_MAP.putIfAbsent(queueName, container);
+        DirectMessageListenerContainer getContainer = CONTAINER_MAP.putIfAbsent(FullqueueName, container);
         if (getContainer != null) {
-            log.info("动态修改mq监听成功,交换机:{},路由key:{},队列:{},线程数:{}", EXCHANGE, routingKey, queueName, consumerNum);
+            log.info("动态修改mq监听成功,交换机:{},路由key:{},队列:{},线程数:{}", EXCHANGE, routingKey, FullqueueName, consumerNum);
             container = getContainer;
         } else {
-            container.setQueueNames(queueName);
-            log.info("动态添加mq监听成功,交换机:{},路由key:{},队列:{},线程数:{}", EXCHANGE, routingKey, queueName, consumerNum);
+            container.setQueueNames(FullqueueName);
+            log.info("动态添加mq监听成功,交换机:{},路由key:{},队列:{},线程数:{}", EXCHANGE, routingKey, FullqueueName, consumerNum);
         }
         container.setPrefetchCount(consumerNum);
         if (needDlx) {
@@ -150,7 +152,7 @@ public class DynamicRabbitmq {
             container.setAcknowledgeMode(AcknowledgeMode.MANUAL);
         }
         container.setConsumersPerQueue(consumerNum);
-        container.setMessageListener(new ConsumerHandler(!needDlx));
+        container.setMessageListener(new ConsumerHandler(!needDlx,queueName));
         container.setAdviceChain(createRetry());
         container.setDefaultRequeueRejected(false);
         container.start();

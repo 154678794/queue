@@ -2,6 +2,7 @@ package com.example.queue.dynamicRabbitmq;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -18,23 +19,25 @@ public class publishHandler {
     DynamicRabbitmq dynamicRabbitmq;
 
     @GetMapping("/dynamicCreate")
-    public void dynamicCreate(){
-        dynamicRabbitmq.startListener("dynamicQueue1","dynamic1");
+    public void dynamicCreate(@RequestParam String queueName,
+                              @RequestParam String dynamic){
+        dynamicRabbitmq.startListener(queueName,dynamic);
     }
 
     @GetMapping("/dynamicMessage")
-    public void dynamicMessage(){
-        dynamicRabbitmq.sendMsg("dynamic1","dynamicMessage11");
+    public void dynamicMessage(@RequestParam String dynamicMessage,
+                               @RequestParam String dynamic){
+        dynamicRabbitmq.sendMsg(dynamic,dynamicMessage);
     }
 
     @GetMapping("/deleteQueue")
-    public void deleteQueue(){
-        dynamicRabbitmq.deleteQueue("dynamicQueue1");
+    public void deleteQueue(@RequestParam String queueName){
+        dynamicRabbitmq.deleteQueue(queueName);
     }
 
     @GetMapping("/stopListener")
-    public void stopListener(){
-        dynamicRabbitmq.stopListener("dynamicQueue1");
+    public void stopListener(@RequestParam String queueName){
+        dynamicRabbitmq.stopListener(queueName);
     }
 
 }
